@@ -1,0 +1,41 @@
+name: Create resourcepack zip
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      NAME: vapes-rp
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install unzip
+        run: |
+          sudo apt update
+          sudo apt install -y unzip
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Use metabuild
+        id: metabuild
+        run: |-
+          echo "NAME=$(java -jar metabuild-1.0.jar info -w name)" >> $GITHUB_OUTPUT
+          echo "ZIPPATH=$(java -jar metabuild-1.0.jar zip)" >> $GITHUB_OUTPUT
+
+      - name: Unzip the output
+        run: unzip -d out ${{ steps.metabuild.outputs.ZIPPATH }}
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: ${{ steps.metabuild.outputs.NAME }}
+          path: out

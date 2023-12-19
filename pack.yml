@@ -1,0 +1,7 @@
+name: "%dirname%-%version%"
+pack-format: "1.20"
+description: |-
+  <gray>Stay True patch
+  <gray>v%version% by <gradient:#f6895a:#fff16b>ᴏᴜᴛʙʀᴇᴀᴋ</gradient>
+placeholders:
+  version: "1.0"
